@@ -1,0 +1,280 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Conceitos de Audiencia</title>
+	<!-- Inclui os arquivos CSS do Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="{% static 'relatorioapp/style.css'%}">
+	<style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    outline: none;
+    scroll-behavior: smooth;
+    font-family: 'Poppins', sans-serif;
+}
+        .t-conceitos{
+            text-align: center;
+            font-size: 3rem;
+        }
+		.t-conceitos{
+			font-size: 1.3rem;
+			color: #555555;
+			text-decoration: none;
+		}
+
+		header{
+			background-color: rgb(0,128,201);
+		}
+		.img-conceitos{
+			max-width: 8rem;
+			max-height: 12rem;
+		}
+		.t-pg-conceitos{
+			text-align: center;
+		}
+		
+    </style>
+</head>
+<body>
+	{% comment %} 
+  Modificando a barra de navegação a depender do estado do usário:
+  Logado ou não-logado.
+{% endcomment %}
+{% if user.is_authenticated%}
+{% block header_logout %}
+    <header class="header-1">
+    <a href="#" class="logo">PIPA PESQUISA</a>
+     <i class='bx bx-menu' id="menu-icon"></i>
+      <nav class="navbar">
+          <a href="" class="active">Olá, {{user.get_full_name}}!</a>
+          <a href="{% url 'relatorio:home'%}">HOME</a>
+          <a href="{% url 'relatorio:contato'%}">CONTATO</a>
+          <a href="{% url 'logout' %}"><button type="button" class="btn btn-danger">LOGOUT</button></a>
+      </nav>
+      </header>
+  {% endblock %}
+{% else %}
+{% block header_login %}
+    <header class="header-1">
+        <a href="#" class="logo">PIPA PESQUISA</a>
+
+        <i class='bx bx-menu' id="menu-icon"></i>
+
+        <nav class="navbar">
+            <a href="{% url 'relatorio:home'%}" class="active">HOME</a>
+            <a href="{% url 'relatorio:list_relatorio'%}?tipo=Noticia">NOTICIAS</a>
+            <a href="#">CONTATO</a>
+            <a href="{% url 'login' %}"><button type="button" class="btn btn-outline-light">LOGIN</button></a>
+        </nav>
+    </header>
+{% endblock %}
+{% endif %}
+
+{% block submenu %}
+<div class="submenu">
+  <a href="{% url 'relatorio:list_relatorio'%}?tipo=Pesquisa" class="botao-submenu">PESQUISAS</a>
+  <a href="{% url 'relatorio:conceitos_audiencia'%}" class="botao-submenu">CONCEITOS</a>
+  <a href="{% url 'relatorio:list_programacao'%}?tipo=Programacao" class="botao-submenu">PROGRAMAÇÃO</a>
+  <a href="{% url 'relatorio:list_programacao'%}?tipo=Pipacast" class="botao-submenu">PIPACAST</a>
+  <a href="{% url 'relatorio:list_relatorio'%}?tipo=Noticia" class="botao-submenu">NOTÍCIA</a>
+  {% if user.is_authenticated%}
+    {% if user.groups.all %} 
+      {% for group in user.groups.all %}
+        {% if group.name == 'leitor' %}
+            <a href="{% url 'relatorio:list_relatorio'%}?tipo=Relatorio_de_audiencia" class="botao-submenu">RELATÓRIOS</a>
+        {% endif %}
+        {% if group.name == 'editor' or group.name == 'root' %}
+          <a href="{% url 'relatorio:list_relatorio'%}?tipo=Relatorio_de_audiencia" class="botao-submenu">RELATÓRIOS</a>
+          <a href="{% url 'relatorio:create_relatorio'%}" class="botao-submenu">ADD RELATÓRIO</a>
+          <a href="{% url 'relatorio:create_programacao'%}" class="botao-submenu">ADD PROGRAMAÇÂO</a>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  {% endif %}
+</div>
+{% endblock %}
+	
+    <br><br><br>
+        <h1 class="t-pg-conceitos"><b>Conceitos de Audiencia</b></h1>
+
+	<div class="container my-5">
+		
+		<div id="accordion">
+
+
+			<div class="card">
+				<div class="card-header" id="headingOne">
+					<h5 class="mb-0">
+						<button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+							<b class="t-conceitos">UNIVERSO E AMOSTRA</b>
+							<i class='bx bx-chevron-down'></i>
+						</button>
+						
+					</h5>
+				</div>
+
+				<div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+					<div class="card-body">
+						<b>UNIVERSO</b><br>
+						É o conjunto de indivíduos/domicílios que se quer representar numa pesquisa, possuindo uma ou mais características em comum.
+						<br>
+						<img src="https://picsum.photos/200/300?random=1" class="img-conceitos">
+						<br><br>
+						<b>AMOSTRA</b><br>
+						É a parte da população que representa o universo, selecionada através de critérios estatísticos.
+						<br>
+						<img src="https://picsum.photos/200/300?random=2" class="img-conceitos">
+					</div>
+				</div>
+			</div>
+
+
+			
+			<div class="card">
+				<div class="card-header" id="headingTwo">
+					<h5 class="mb-0">
+						<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+							<b class="t-conceitos">PROCESSO DE AFERIÇÃO DE AUDIÊNCIA</b>
+							<i class='bx bx-chevron-down'></i>
+						</button>
+						
+					</h5>
+				</div>
+
+				<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+					<div class="card-body">
+						<b>PEOPLEMETER</b><br>
+						<img src="https://picsum.photos/200/300?random=2" class="img-conceitos"><br>
+						Aparelho utilizado em praças de pesquisas regulares e contínuas. Via telefonia celular, informa minuto-a-minuto o que e quem está assistindo TV, durante 24hrs.
+						<br><br>
+						<b>CADERNO</b><br>
+						<img src="https://picsum.photos/200/300?random=1" class="img-conceitos"><br>
+						Utilizado em praças de pesquisas especiais, realizadas de uma a quatro vezes, geralmente em intervalos de 7 dias. Os entrevistados preenchem o caderno, informando as emissoras assistidas em faixas de 15 minutos, durante 24h.
+					</div>
+				</div>
+			</div>
+			
+			<div class="card">
+				<div class="card-header" id="headingThree">
+					<h5 class="mb-0">
+						<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+							<b class="t-conceitos">TOTAL DE LIGADOS</b>
+							<i class='bx bx-chevron-down'></i>
+						</button>
+					</h5>
+				</div>
+
+				<div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+					<div class="card-body">
+						É o número de pessoas/domicílios com a TV ligada durante um programa/faixa horária.<br><br>
+
+						O aparelho de medição da Kantar Ibope reconhece diferentes tipos de sintonia (TV, VOD, videogame etc.). Para possibilitar diferentes análises, existem alguns tipos de “Total de Ligados”:
+						<br><br>
+						<b>TOTAL DE LIGADOS:</b> todos os aparelhos ligados em qualquer sintonia<br>
+						<b>TOTAL DE LIGADOS:</b> ESPECIAL: ligados em sintonias que apresentem algum conteúdo televisivo.<br>
+						<b>TOTAL DE LIGADOS:</b> LINEAR: aparelhos ligados em canais de TV com conteúdo linear.
+					</div>
+				</div>
+			</div>
+
+            <div class="card">
+				<div class="card-header" id="headingFour">
+					<h5 class="mb-0">
+						<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+							<b class="t-conceitos">AUDIÊNCIA</b>
+							<i class='bx bx-chevron-down'></i>
+						</button>
+					</h5>
+				</div>
+
+				<div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+					<div class="card-body">
+						É o percentual de domicílios ou pessoas que assistiram a uma emissora (programa ou faixa horária) em média por minuto.<br><br>
+						A audiência leva em consideração o número de telespectadores e o tempo que cada um passou assistindo.
+						Na medição de audiência são contabilizados apenas telespectadores que assistiram por, no mínimo, 1 minuto. Veja abaixo quanto equivale 1 ponto de audiência.<br><br>
+						<img src="https://picsum.photos/200/300?random=3" class="img-conceitos">
+					</div>
+				</div>
+			</div>
+
+            <div class="card">
+				<div class="card-header" id="headingFive">
+					<h5 class="mb-0">
+						<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+							<b class="t-conceitos">SHARE</b>
+							<i class='bx bx-chevron-down'></i>
+						</button>
+					</h5>
+				</div>
+
+				<div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordion">
+					<div class="card-body">
+						É a participação da audiência de uma emissora sobre o total ligados em um determinado período.
+						Para a TV Bahia, permite que se compare com o share da concorrência a fim de monitorar se um determinado programa ou faixa horária está trazendo ou perdendo audiência.<br><br>
+						<b>Veja abaixo a diferença entre Audiência e Share:</b><br><br>
+						• A audiência é calculada em relação ao Universo, incluindo todos os domicílios / indivíduos: Os que estão com a TV ligada e os que estão com a TV desligada.<br><br>
+						• Já o share é calculado apenas em relação ao Total de Ligados, ou seja, o share “repercentualiza” a audiência considerando apenas quem estava com a TV ligada. Por isso, a soma do share de todas as emissoras soma 100%.
+					</div>
+				</div>
+			</div>
+
+
+            <div class="card">
+				<div class="card-header" id="headingSix">
+					<h5 class="mb-0">
+						<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+							<b class="t-conceitos">PERFIL DE PÚBLICO</b>
+							<i class='bx bx-chevron-down'></i>
+						</button>
+					</h5>
+				</div>
+
+				<div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordion">
+					<div class="card-body">
+						É possível observar as características demográficas da audiência de uma emissora / programa através do perfil.<br><br>
+						Essa variável que mostra a distribuição do total da audiência pelos targets de sexo, classe socioeconômica, faixa etária e etc, mostrando a composição de público de determinado programa.<br><br>
+						<img src="https://picsum.photos/200/300?random=3" class="img-conceitos">
+					</div>
+				</div>
+			</div>
+
+            <div class="card">
+				<div class="card-header" id="headingSeven">
+					<h5 class="mb-0">
+						<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+							<b class="t-conceitos">ENTENDENDO O NI (NÃO IDENTIFICADO)</b>
+							<i class='bx bx-chevron-down'></i>
+						</button>
+					</h5>
+				</div>
+
+				<div id="collapseSeven" class="collapse" aria-labelledby="headingSeven" data-parent="#accordion">
+					<div class="card-body">
+						<img src="https://picsum.photos/200/300?random=3" class="img-conceitos">
+					</div>
+				</div>
+			</div>
+
+
+		</div>
+	</div>
+	
+	<footer class="bg-dark text-white py-3">
+		<div class="container">
+			<p>Exemplo de página com accordion</p>
+		</div>
+	</footer>
+	
+	<!-- Inclui os arquivos JavaScript do Bootstrap -->
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,468 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    outline: none;
+    scroll-behavior: smooth;
+    font-family: 'Poppins', sans-serif;
+}
+
+:root {
+    --bg-color: #1f242d;
+    --second-bg-color: #323946;
+    --text-color: #fff;
+    --main-color: rgb(0,128,201);
+    --color-conteudo:rgb(255,255,255);
+    --footer-color: rgb(45,57,133);
+}
+
+/* html{
+    font-size: 62.5%;
+    overflow-x: hidden;
+}  */
+
+body{
+    background: var(--text-color);/*Colocar bg-color  caso fique ruim*/
+    color: var(--bg-color);
+}
+
+
+
+/* ==================================| HEADER |===================================== */
+
+
+.header-1 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  max-height: 6rem;
+  min-height: 6rem;
+  padding: 2rem 9%;
+  background-size: cover;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+  background: var(--main-color);
+ 
+}
+
+.header-1.active{
+  background: var(--text-color);
+}
+.logo{
+  font-size: 2.5rem;
+  color: var(--text-color);
+  font-weight: 600;
+  cursor: default;
+  text-decoration: none;
+  
+}
+
+.navbar a {
+  font-size: 1.2rem;
+  color: var(--text-color);
+  margin-left: 4rem;
+  transition: 2s;
+  text-decoration: none;
+}
+
+.navbar a:hover,
+.navbar a.active{
+  color: var(--text-color);
+}
+
+#menu-icon {
+  font-size: 3.6rem;
+  color: var(--text-color);
+  display: none;
+
+}
+
+.botao-submenu {
+  display: inline-block;
+  padding: 1px 20px;
+  background-color: var(--footer-color);
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  /* border-radius: 5px; */
+  border-right: 1px solid;
+  border-left: none;
+  border-top: none;
+  border-bottom: none;
+  cursor: pointer;
+  margin: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  transition: background-color 0.3s;
+}
+
+.botao-submenu:hover {
+  background-color: var(--main-color);
+}
+
+.submenu {
+  width: 100%;
+  margin-top: 6rem;
+  background-color: var(--footer-color);
+  text-align: center;
+  scroll-behavior: auto;
+  position: fixed;
+  z-index: 999;
+  }
+
+
+
+/* ======================================(Ainda nao sei onde e  )=====================================*/
+
+span {
+  font-size: 4rem;
+    color: var(--main-color);
+}
+
+/*==============================| CAROUSEL |==============================*/
+
+.carousel-inner .d-block{
+    max-height: 71rem;
+}
+
+.carousel-caption h1{
+  color: #fff;
+}
+
+
+
+
+
+/* .nav{
+    padding: 10px 0px;
+    background: var(--main-color);
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    height: 10rem;
+    padding-top: 0;
+    
+} */
+
+ .main-menu>li,i{
+     display: inline-block;
+     width: 150px;
+     /* padding: 10px 0px; */
+     /* margin-left: 10px; */
+     text-align: center;
+     color: white;
+     font-size: 1.6rem;
+     /* border-left: 1px solid white; */
+     /* transition: .4s; */
+     cursor: pointer;
+     box-sizing: border-box;
+     
+
+ }
+ 
+ .main-menu li:hover .sub-menu{
+      display: block;
+ }
+
+ .main-menu i{
+    font-size: 4rem;
+    transform: scale(1.02);
+ }
+
+
+/* .heading{
+    text-align: center;
+    font-size: 4.5rem;
+} */
+
+
+/*==============================ESTILO DA (section) DE NOTICIAS==============================*/
+
+
+
+  .caixa{
+    width: 90%;
+    margin: 50px auto;
+  }
+  /* .heading{
+    text-align: center;
+    font-size: 30px;
+    margin-bottom: 50px;
+  } */
+  .row{
+    display: flex;
+    background: row;
+    justify-content: space-around;
+    flex-flow: wrap;
+  }
+
+  .card-img-top{
+    margin-left: 0;
+  }
+
+  .posts{
+    width: 20%;
+    background: #fff;
+    border: 1px solid #ccc;
+    margin-bottom: 50px;
+    transition: 0.3s;
+  }
+
+  /* .card-header{
+    text-align: center;
+    padding: 50px 10px;
+    background: linear-gradient(to right,#ff416c,#ff4b2b);
+    color: #fff;
+  } */
+  .posts-body{
+    padding: 30px 20px;
+    text-align: center;
+    font-size: 18px;
+  }
+  .posts-body .btn{
+    display: block;
+    color: #fff;
+    text-align: center;
+    background: linear-gradient(to right,#ff416c,#ff4b2b);
+    margin-top: 30px;
+    text-decoration: none;
+    padding: 10px 5px;
+  } 
+  .posts:hover{
+    transform: scale(1.05);
+    box-shadow: 0 0 40px -10px rgba(0,0,0,0.25);
+  }
+
+
+
+  @media screen and (max-width:1000px){
+    .posts{
+      width: 40%;
+    }
+  }
+  @media screen and (max-width:620px){
+    .container{
+      width: 100%;
+    }
+    .heading{
+      padding: 20px;
+      font-size: 20px;
+    }
+    .posts{
+      width: 80%;
+    }
+  }
+
+  /*==============================ESTILO DA (section) DE CONTATO==============================*/
+.contact h2{
+    margin-bottom: 3rem;
+}
+.contact form{
+    max-width: 70rem;
+    margin: 1rem auto;
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.contact form .input-box{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.contact form .input-box input,
+.contact form textarea {
+    width: 100%;
+    padding: 1.5rem;
+    font-size: 1.6rem;
+    color: var(--text-color);
+    background: #FEEFE5;
+    border-radius: .8rem;
+    margin: .7rem 0;
+    color: var(--bg-color);
+}
+
+.contact form .input-box input{
+    width: 49%;
+}
+.contact form textarea{
+    resize: none;
+    color: var(--bg-color);
+}
+.contact form .bnt {
+    margin-top: 2rem;
+    cursor: pointer;
+    
+}
+
+/*==============================ESTILO DO (footer)==============================*/
+
+.footer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 2rem 9%;
+    background: var(--footer-color);
+    position: relative;
+}
+.footer-text p{
+    font-size: 1.6rem;
+    color: var(--text-color);
+}
+.footer-iconTop a{
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: .8rem;
+    background: var(--main-color);
+    border-radius: .8rem;
+    transition: .5s ease;
+    max-width: 3.5rem;
+}
+.footer-iconTop a:hover{
+    box-shadow: 0 0 1rem var(--main-color) !important;
+}
+.footer-iconTop a i{
+    font-size: 2rem;
+    color: var(--text-color);
+}
+
+.bnt{
+  display: inline-block;
+  padding: 1rem 2.8rem;
+  background: var(--main-color);
+  border-radius: 4rem;
+  box-shadow: 0 0 1rem var(--bg-color);
+  font-size: 1.6rem;
+  letter-spacing: .1rem;
+  font-weight: 600;
+  transition: 5s ease;
+  text-decoration: none;
+}
+
+/* =================================(SUB-CAROSEL)================================ */
+
+.sub-carusel {
+  display: flex;
+  justify-content: center;
+  padding: 0;
+}
+
+.sub-carusel ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 2px;
+}
+
+.sub-carusel li {
+  display: inline-block;
+  text-align: center;
+  margin: 0 10px;
+}
+
+.sub-carusel a {
+  text-decoration: none;
+}
+
+.sub-carusel img {
+  width: 50px;
+  height: 50px;
+}
+
+.sub-carusel span {
+  display: block;
+  margin-top: 5px;
+}
+.sub-carusel-letra{
+  font-size: 2rem;
+  color: #1f242d;
+}
+
+/* =================================(PAGE-CONCEITOS-DE-AUDIENCIA)================================ */
+
+.t-conceitos{
+    text-align: center;
+    font-size: 3rem;
+    font-size: 1.3rem;
+    color: #555555;
+    text-decoration: none;
+}
+
+.img-conceitos{
+    max-width: 8rem;
+    max-height: 12rem;
+}
+.t-pg-conceitos{
+    text-align: center;
+}
+
+
+/* ======================================================= */
+
+ 
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 500px;
+}
+
+.postagem-edicao {
+  background-color: #f2f2f2;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  text-align: center;
+  max-height: 30rem;
+}
+
+.postagem-edicao img {
+  max-width: 100%;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.postagem-edicao h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.postagem-edicao p {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.postagem-edicao button {
+  /* background-color: #333; */
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+
+/* ====================|Tela logout|======================== */
+
+.logout-message {
+   background-color: #f8f9fa;
+   padding: 20px;   
+   text-align: center;   
+   font-size: 18px;    
+   margin-top: 15%;  
+    }
+ .bx{
+  color: #1f242d;
+ }
+
+
+
+

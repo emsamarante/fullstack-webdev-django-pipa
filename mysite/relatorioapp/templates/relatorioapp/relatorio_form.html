@@ -1,0 +1,124 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="{% static 'relatorioapp/style.css'%}">
+    {% block titulo_page %}
+    <title>Adicione um Relatório</title>
+    {%  endblock %}
+</head>
+<body>
+
+
+{% comment %} 
+  Modificando a barra de navegação a depender do estado do usário:
+  Logado ou não-logado.
+{% endcomment %}
+{% if user.is_authenticated%}
+{% block header_logout %}
+    <header class="header-1">
+    <a href="#" class="logo">PIPA PESQUISA</a>
+     <i class='bx bx-menu' id="menu-icon"></i>
+      <nav class="navbar">
+          <a href="" class="active">Olá, {{user.get_full_name}}!</a>
+          <a href="{% url 'relatorio:home'%}">HOME</a>
+          <a href="{% url 'relatorio:contato'%}">CONTATO</a>
+          <a href="{% url 'logout' %}"><button type="button" class="btn btn-danger">LOGOUT</button></a>
+      </nav>
+      </header>
+  {% endblock %}
+{% else %}
+{% block header_login %}
+    <header class="header-1">
+        <a href="#" class="logo">PIPA PESQUISA</a>
+
+        <i class='bx bx-menu' id="menu-icon"></i>
+
+        <nav class="navbar">
+            <a href="{% url 'relatorio:home'%}" class="active">HOME</a>
+            <a href="#">CONTATO</a>
+            <a href="{% url 'login' %}"><button type="button" class="btn btn-outline-light">LOGIN</button></a>
+        </nav>
+    </header>
+{% endblock %}
+{% endif %}
+
+{% block submenu %}
+<div class="submenu">
+  <a href="{% url 'relatorio:list_relatorio'%}?tipo=Pesquisa" class="botao-submenu">PESQUISAS</a>
+  <a href="{% url 'relatorio:conceitos_audiencia'%}" class="botao-submenu">CONCEITOS</a>
+  <a href="{% url 'relatorio:list_programacao'%}?tipo=Programacao" class="botao-submenu">PROGRAMAÇÃO</a>
+  <a href="{% url 'relatorio:list_programacao'%}?tipo=Pipacast" class="botao-submenu">PIPACAST</a>
+  <a href="{% url 'relatorio:list_relatorio'%}?tipo=Noticia" class="botao-submenu">NOTÍCIA</a>
+  {% if user.is_authenticated%}
+    {% if user.groups.all %} 
+      {% for group in user.groups.all %}
+        {% if group.name == 'leitor' %}
+            <a href="{% url 'relatorio:list_relatorio'%}?tipo=Relatorio_de_audiencia" class="botao-submenu">RELATÓRIOS</a>
+        {% endif %}
+        {% if group.name == 'editor' or group.name == 'root' %}
+          <a href="{% url 'relatorio:list_relatorio'%}?tipo=Relatorio_de_audiencia" class="botao-submenu">RELATÓRIOS</a>
+          <a href="{% url 'relatorio:create_relatorio'%}" class="botao-submenu">ADD RELATÓRIO</a>
+          <a href="{% url 'relatorio:create_programacao'%}" class="botao-submenu">ADD PROGRAMAÇÂO</a>
+          <a href="{% url 'relatorio:create_carrossel'%}" class="botao-submenu">CARROSSEL</a>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  {% endif %}
+</div>
+{% endblock %}
+
+
+<br><br><br><br><br><br><br><br>
+
+
+ 
+{% if user.is_authenticated %}
+  {% if user.groups.all %}
+    {% for group in user.groups.all %}
+      {% if group.name != 'leitor' %}
+        {% block formulario_Criar_Relatorio %}
+          <div class="container">
+            <h1 class="t-pg-conceitos"><b>Use esta página para adicionar os conteúdos:</b></h1>
+            <br><br>
+            <li class="texto"><strong>Relatório de audiência - Arquivo PDF</strong></li>
+            <li class="texto"><strong>Notícia - Matéria no formato de Blog</strong></li>
+            <li class="texto"><strong>Pesquisa - Matéria no formato de Blog</strong></li>
+            <li class="texto"><strong>Outro - Hospedar conteúdo externo</strong></li>
+          </div>
+          <br><br>
+          <div class="container">
+            <div class="form-group">
+                <form method="POST" enctype='multipart/form-data'>
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div class='mb-3'>
+                      <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                      {{ field }}
+                      {{ field.errors }}
+                    </div>
+                    {% endfor %}       
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </form>
+            </div>
+          </div>
+        {% endblock%}
+      {% else %}
+        <div class='container'>
+          <h1>Você não tem permissão para ver este conteúdo.<h1>
+        <div>
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+{% endif %}
+
+
+<br><br><br><br><br>
+
+
+

@@ -1,0 +1,225 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br" style={"font-size:62.5%"}>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="{% static 'relatorioapp/style.css'%}">
+    {% block titulo_page %}
+    <title>Home</title>
+    {%  endblock %}
+
+
+    <style>
+      .carousel-caption {
+        background-color: rgba(0, 0, 0, 0.4);
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+      }
+  
+      .carousel-caption h3,
+      .carousel-caption p {
+        color: #ffffff;
+        margin: 5px;
+      }
+
+    </style>
+
+
+</head>
+<body> 
+
+
+{% comment %} 
+  Modificando a barra de navegação a depender do estado do usário:
+  Logado ou não-logado.
+{% endcomment %}
+{% if user.is_authenticated%}
+{% block header_logout %}
+    <header class="header-1">
+    <a href="#" class="logo">PIPA PESQUISA</a>
+     <i class='bx bx-menu' id="menu-icon"></i>
+      <nav class="navbar">
+          <a href="" class="active">Olá, {{user.get_full_name}}!</a>
+          <a href="{% url 'relatorio:home'%}">HOME</a>
+          <a href="{% url 'relatorio:contato'%}">CONTATO</a>
+          <a href="{% url 'logout' %}"><button type="button" class="btn btn-danger">LOGOUT</button></a>
+      </nav>
+      </header>
+  {% endblock %}
+{% else %}
+{% block header_login %}
+    <header class="header-1">
+        <a href="#" class="logo">PIPA PESQUISA</a>
+
+        <i class='bx bx-menu' id="menu-icon"></i>
+
+        <nav class="navbar">
+            <a href="{% url 'relatorio:home'%}" class="active">HOME</a>
+            <a href="#">CONTATO</a>
+            <a href="{% url 'login' %}"><button type="button" class="btn btn-outline-light">LOGIN</button></a>
+        </nav>
+    </header>
+{% endblock %}
+{% endif %}
+
+{% block submenu %}
+<div class="submenu">
+  <a href="{% url 'relatorio:list_relatorio'%}?tipo=Pesquisa" class="botao-submenu">PESQUISAS</a>
+  <a href="{% url 'relatorio:conceitos_audiencia'%}" class="botao-submenu">CONCEITOS</a>
+  <a href="{% url 'relatorio:list_programacao'%}?tipo=Programacao" class="botao-submenu">PROGRAMAÇÃO</a>
+  <a href="{% url 'relatorio:list_programacao'%}?tipo=Pipacast" class="botao-submenu">PIPACAST</a>
+  <a href="{% url 'relatorio:list_relatorio'%}?tipo=Noticia" class="botao-submenu">NOTÍCIA</a>
+  {% if user.is_authenticated%}
+    {% if user.groups.all %} 
+      {% for group in user.groups.all %}
+        {% if group.name == 'leitor' %}
+            <a href="{% url 'relatorio:list_relatorio'%}?tipo=Relatorio_de_audiencia" class="botao-submenu">RELATÓRIOS</a>
+        {% endif %}
+        {% if group.name == 'editor' or group.name == 'root' %}
+          <a href="{% url 'relatorio:list_relatorio'%}?tipo=Relatorio_de_audiencia" class="botao-submenu">RELATÓRIOS</a>
+          <a href="{% url 'relatorio:create_relatorio'%}" class="botao-submenu">ADD RELATÓRIO</a>
+          <a href="{% url 'relatorio:create_programacao'%}" class="botao-submenu">ADD PROGRAMAÇÂO</a>
+          <a href="{% url 'relatorio:create_carrossel'%}" class="botao-submenu">CARROSSEL</a>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  {% endif %}
+</div>
+{% endblock %}
+
+<br><br><br><br><br>
+
+
+
+<div id="carouselExample" class="carousel slide" data-ride="carousel">
+  <div class="carousel-inner">
+    <!-- Renderizar as imagens do Django no carrossel -->
+    {% for model in relatorios %}
+      {% if model.nome_modelo == 'carrossel'%}
+        {% for imagem in model.carrosseis %}
+          <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <img src="{{ imagem.imagem.url }}" class="d-block w-100" alt="Imagem {{ forloop.counter }}" style="min-height: 55rem; max-height: 55rem;" >
+            <div class="carousel-caption">
+              <h1>{{ imagem.legenda_1 }}</h1>
+              <p>{{ imagem.legenda_2 }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+
+{% block formulario_Criar_Relatorio %}
+{% endblock%}
+
+<br><br><br>
+
+<h1 class="t-pg-conceitos"><b>Conteúdo</b></h1>
+<br>
+
+<br><br><br>
+
+{% block card_relatorio %}
+    <div class="container" >
+        <div class="row">
+            {% for model in relatorios %}
+                {% if model.nome_modelo == 'relatorio'%}
+                    <!-- Os relatórios só estarão visíveis para os usuários logados -->
+                        {% for item in model.registros %}
+                            {% if item.tipo == 'Relatorio_de_audiencia'%}
+                              {% if user.is_authenticated %}
+                                <div class="card" style="width: 30rem; border: none;">
+                                  {% if item.imagem_thumb %}
+                                      <img src="{{item.imagem_thumb.url}}" class="card-img-top" alt="..." style="min-height: 15rem; max-height: 15rem;">
+                                  {%else%}
+                                      <img src="{% static '/mainApp/images/powerbi.png' %}" class="card-img-top" alt="..." style="min-height: 15rem; max-height: 15rem;">
+                                  {% endif %}
+                                  <div class="card">
+                                      <h5 class="card-title"> Título: {{item.titulo|slice:50}} - Data: {{item.data}} </h5>
+                                      <p class="card-text"> {{item.descricao|slice:50}}</p>
+                                      <a href="/relatorio/detail/{{item.id}}" class="btn btn-primary">Clique para ver o conteúdo.</a>
+                                      <br>
+                                  </div>
+                                </div>
+                              
+                              {% endif %}
+                            {% else %}
+                              <div class="card" style="width: 30rem; border: none;">
+                                {% if item.imagem_thumb %}
+                                    <img src="{{item.imagem_thumb.url}}" class="card-img-top" alt="..." style="min-height: 15rem; max-height: 15rem;">
+                                {%else%}
+                                    <img src="{% static '/mainApp/images/powerbi.png' %}" class="card-img-top" alt="..." style="min-height: 15rem; max-height: 15rem;">
+                                {% endif %}
+                                <div class="card">
+                                    <h5 class="card-title"> Título: {{item.titulo|slice:50}} - Data: {{item.data}} </h5>
+                                    <p class="card-text"> {{item.descricao|slice:50}}</p>
+                                    <a href="/relatorio/detail/{{item.id}}" class="btn btn-primary">Clique para ver o conteúdo.</a>
+                                    <br>
+                                </div>
+                              </div>
+                            {% endif %}
+                        {% endfor %}
+                    <!-- Fim da parte do código que mostra o conteúdo para os usuários logados -->
+                {% else %}
+                    {% for item in model.registros %}
+                        <div class="card" style="width: 30rem; border: none;">
+                            {% if item.imagem_thumb %}
+                                <img src="{{item.imagem_thumb.url}}" class="card-img-top" alt="..." style="min-height: 15rem; max-height: 15rem;">
+                            {%else%}
+                            <img src="{% static '/mainApp/images/powerbi.png' %}" class="card-img-top" alt="..." style="min-height: 15rem; max-height: 15rem;">
+                            {% endif %}                  
+                            <div class="card">
+                                <h5 class="card-title"> Título: {{item.titulo|slice:50}} - Data: {{item.data}} </h5>
+                                <p class="card-text"> {{item.descricao|slice:50}}</p>
+                                <a href="/programacao/detail/{{item.id}}" class="btn btn-primary">Clique para ver o conteúdo.</a>
+                                <br>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif%}    
+            {% endfor %}
+        </div>
+    </div> 
+{% endblock %}
+
+
+
+{% block footer %}
+<footer class="footer">
+  <div class="footer-text">
+      <p>© Copyright Rede Bahia 2022. All Rights Reserved to Rede Bahia</p>
+  </div>
+
+  <div class="footer-iconTop">
+      <a href="#carouselExampleDark"><i class='bx bx-up-arrow-alt'></i></a>
+  </div>
+</footer>
+{% endblock %}
+
+
+{% comment %} <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script> {% endcomment %}
+<script>
+  // Iniciar o carrossel com intervalo de 5 segundos
+  $(document).ready(function() {
+    $('#carouselExample').carousel({
+      interval: 3500
+    });
+  });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.min.js"></script>
+
+
+
+</body>
+</html>

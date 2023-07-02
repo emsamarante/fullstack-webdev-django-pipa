@@ -1,0 +1,227 @@
+{% if programacao.tipo == 'Pipacast' %}
+
+	{% if programacao.subtipo == 'pdf' %}
+
+		<div class = 'container'>
+			{% if programacao.arquivo %}
+				<iframe src="{{programacao.arquivo.url}}" type="application/pdf" width="100%" height="900px">
+			{% endif %}			
+		</div>
+
+	{% else %}
+
+		<div class='container'>
+			{% if programacao.titulo %}
+        		<h1 class="title"><b>{{programacao.titulo}}</b></h1>  
+        		<br>  
+    		{% endif%}
+
+    		{% if programacao.descricao %}
+			    <div class="linha-fina">
+			        <h2>{{programacao.descricao}}</h2>
+			    </div>
+    		{% endif %}
+
+		    <div class="barra-titulo">
+		        <p class="escritor"><b>Por {{programacao.autor}}</b></p>		        
+		        {% if programacao.data%}
+			        <p class="data">{{programacao.data}} </p>
+			        <br><br>
+		        {% endif %}
+		    </div>
+
+	        {% if programacao.imagem_post %}
+		        {% if programacao.legenda_imagem %}
+			        <img class='img-paginas' src="{{programacao.imagem_post.url}}" width="800rem" height="500rem">
+			        <br><br>
+			        <p class="descricao">{{programacao.legenda_imagem}}</p>
+			        <br><br><br>
+		        {% endif %}
+		    {% endif %}
+
+		    {% if programacao.paragrafo1 %}
+		        <p class="texto">{{programacao.paragrafo1}}</p>
+		        <br><br><br>
+		    {% endif %}
+
+		    {% if programacao.paragrafo2 %}
+		        <p class="texto">{{programacao.paragrafo2}}</p>
+		        <br><br><br>
+		    {% endif %}
+
+		    {% if programacao.paragrafo3 %}
+		        <p class="texto">{{programacao.paragrafo3}}</p>
+		        <br><br><br>
+		    {% endif %}
+
+		    {% if programacao.paragrafo4 %}
+		        <p class="texto">{{programacao.paragrafo4}}</p>
+		        <br><br><br>
+		    {% endif %}
+
+		    {% if programacao.paragrafo5 %}
+		        <p class="texto">{{programacao.paragrafo5}}</p>
+		        <br><br><br>
+		    {% endif %}
+		    <br><br><br><br>
+
+		</div>
+
+	{% end if %}
+{% else %}
+
+	{% if programacao.subtipo == 'pdf' %}
+
+		<div class = 'container'>
+			{% if programacao.arquivo %}
+				<iframe src="{{programacao.arquivo.url}}" type="application/pdf" width="100%" height="900px">
+			{% endif %}			
+		</div>
+
+	{% else %}
+
+		<div class='container'>
+			{% if programacao.titulo %}
+        		<h1 class="title"><b>{{programacao.titulo}}</b></h1>  
+        		<br>  
+    		{% endif%}
+
+    		{% if programacao.descricao %}
+			    <div class="linha-fina">
+			        <h2>{{programacao.descricao}}</h2>
+			    </div>
+    		{% endif %}
+
+		    <div class="barra-titulo">
+		        <p class="escritor"><b>Por {{programacao.autor}}</b></p>		        
+		        {% if programacao.data%}
+			        <p class="data">{{programacao.data}} </p>
+			        <br><br>
+		        {% endif %}
+		    </div>
+
+	        {% if programacao.imagem_post %}
+		        {% if programacao.legenda_imagem %}
+			        <img class='img-paginas' src="{{programacao.imagem_post.url}}" width="800rem" height="500rem">
+			        <br><br>
+			        <p class="descricao">{{programacao.legenda_imagem}}</p>
+			        <br><br><br>
+		        {% endif %}
+		    {% endif %}
+
+		    {% if programacao.paragrafo1 %}
+		        <p class="texto">{{programacao.paragrafo1}}</p>
+		        <br><br><br>
+		    {% endif %}
+
+		    {% if programacao.paragrafo2 %}
+		        <p class="texto">{{programacao.paragrafo2}}</p>
+		        <br><br><br>
+		    {% endif %}
+
+		    {% if programacao.paragrafo3 %}
+		        <p class="texto">{{programacao.paragrafo3}}</p>
+		        <br><br><br>
+		    {% endif %}
+
+		    {% if programacao.paragrafo4 %}
+		        <p class="texto">{{programacao.paragrafo4}}</p>
+		        <br><br><br>
+		    {% endif %}
+
+		    {% if programacao.paragrafo5 %}
+		        <p class="texto">{{programacao.paragrafo5}}</p>
+		        <br><br><br>
+		    {% endif %}
+		    <br><br><br><br>
+
+		</div>
+
+	{% end if %}
+
+{% endif %}
+
+
+===================================================================================
+
+
+
+
+
+
+
+
+{% block card_relatorio %}
+<div class="container" id="noticias">
+    <div class="row">  
+        {% for item in lista_de_relatorios %}
+            {% if user.is_authenticated %}
+                <div class="card" style="width: 37rem; border: none;">
+                    {% if item.imagem_thumb %}
+                        <img src="{{item.imagem_thumb.url}}" class="card-img-top" alt="..." style="max-height: 20rem;">
+                    {%else%}
+                        <img src="{% static '/mainApp/images/powerbi.png' %}" class="card-img-top" alt="..." style="max-height: unset;">
+                    {% endif %}
+                    <div class="img-referencia"></div>
+
+                    <div class="card-body">
+                        <h5 class="card-title"> Título: {{item.titulo}} - Data: {{item.data}}   </h5>
+                        <p class="card-text"> {{item.descricao}}</p>
+                        <a href="/relatorio/detail/{{item.id}}" class="btn btn-primary">Clique para ver o relatório.</a>              
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% block card_relatorio %}
+
+<div class="container">
+  <div class="row">
+        {% for item in lista_da_programacao %}
+        <div class="card" style="width: 37rem; border: none;">
+
+          {% if item.imagem_thumb %}
+          <img src="{{item.imagem_thumb.url}}" class="card-img-top" alt="..." style="min-height: 15rem; max-height: 20rem;">
+          {%else%}
+          <img src="{% static '/mainApp/images/powerbi.png' %}" class="card-img-top" alt="..." style="min-height: 15rem; max-height: 20rem;">
+          {% endif %}
+
+          <div class="card-body">
+            <h5 class="card-title"> Título: {{item.titulo|slice:50}} - Data: {{item.data}} </h5>
+            <p class="card-text"> {{item.descricao|slice:50}}</p>
+            <a href="/programacao/detail/{{item.id}}" class="btn btn-primary">Clique para ver o conteúdo.</a>
+            <br>
+          </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
+
+      
+
+
+
+
+
+
+
+
+
+

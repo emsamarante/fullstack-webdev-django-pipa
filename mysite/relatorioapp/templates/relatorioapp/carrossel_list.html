@@ -1,0 +1,127 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br" style={"font-size:62.5%"}>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="{% static 'relatorioapp/style.css'%}">
+    {% block titulo_page %}
+    <title>Ajuste o carrossel</title>
+    {%  endblock %}
+
+
+    <style>
+      .carousel-caption {
+        background-color: rgba(0, 0, 0, 0.4);
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+      }
+  
+      .carousel-caption h3,
+      .carousel-caption p {
+        color: #ffffff;
+        margin: 5px;
+      }
+
+    </style>
+
+
+</head>
+<body>
+
+
+{% comment %} 
+  Modificando a barra de navegação a depender do estado do usário:
+  Logado ou não-logado.
+{% endcomment %}
+{% if user.is_authenticated%}
+{% block header_logout %}
+    <header class="header-1">
+    <a href="#" class="logo">PIPA PESQUISA</a>
+     <i class='bx bx-menu' id="menu-icon"></i>
+      <nav class="navbar">
+          <a href="" class="active">Olá, {{user.get_full_name}}!</a>
+          <a href="{% url 'relatorio:home'%}">HOME</a>
+          <a href="{% url 'relatorio:contato'%}">CONTATO</a>
+          <a href="{% url 'logout' %}"><button type="button" class="btn btn-danger">LOGOUT</button></a>
+      </nav>
+      </header>
+  {% endblock %}
+{% else %}
+{% block header_login %}
+    <header class="header-1">
+        <a href="#" class="logo">PIPA PESQUISA</a>
+
+        <i class='bx bx-menu' id="menu-icon"></i>
+
+        <nav class="navbar">
+            <a href="{% url 'relatorio:home'%}" class="active">HOME</a>
+            <a href="{% url 'relatorio:contato'%}">CONTATO</a>
+            <a href="{% url 'login' %}"><button type="button" class="btn btn-outline-light">LOGIN</button></a>
+        </nav>
+    </header>
+{% endblock %}
+{% endif %}
+
+{% block submenu %}
+<div class="submenu">
+  <a href="{% url 'relatorio:list_relatorio'%}?tipo=Pesquisa" class="botao-submenu">PESQUISAS</a>
+  <a href="{% url 'relatorio:conceitos_audiencia'%}" class="botao-submenu">CONCEITOS</a>
+  <a href="{% url 'relatorio:list_programacao'%}?tipo=Programacao" class="botao-submenu">PROGRAMAÇÃO</a>
+  <a href="{% url 'relatorio:list_programacao'%}?tipo=Pipacast" class="botao-submenu">PIPACAST</a>
+  <a href="{% url 'relatorio:list_relatorio'%}?tipo=Noticia" class="botao-submenu">NOTÍCIA</a>
+  {% if user.is_authenticated%}
+    {% if user.groups.all %} 
+      {% for group in user.groups.all %}
+        {% if group.name == 'leitor' %}
+            <a href="{% url 'relatorio:list_relatorio'%}?tipo=Relatorio_de_audiencia" class="botao-submenu">RELATÓRIOS</a>
+        {% endif %}
+        {% if group.name == 'editor' or group.name == 'root' %}
+          <a href="{% url 'relatorio:list_relatorio'%}?tipo=Relatorio_de_audiencia" class="botao-submenu">RELATÓRIOS</a>
+          <a href="{% url 'relatorio:create_relatorio'%}" class="botao-submenu">ADD RELATÓRIO</a>
+          <a href="{% url 'relatorio:create_programacao'%}" class="botao-submenu">ADD PROGRAMAÇÂO</a>
+          <a href="{% url 'relatorio:create_carrossel'%}" class="botao-submenu">CARROSSEL</a>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  {% endif %}
+</div>
+{% endblock %}
+
+<br><br><br><br><br>
+<br><br><br><br><br>
+
+<h1 class="t-pg-conceitos"><b>Tela de ajuste das imagens do carrossel</b></h1>
+
+{% comment %} <ol>
+{% for item in lista_carrossel %}
+    <li><img src="{{item.imagem.url}}" style="min-height: 15rem; max-height: 15rem; min-width: 20rem; max-width: 20rem;" ></li>
+    <p><a href="/carrossel/delete/{{item.id}}" >Clique aqui para Excluir esta imagem do carrossel!</a></p>
+    <br>
+{% endfor %}
+</ol>
+
+<br><br><br><br><br><br> {% endcomment %}
+  
+
+{% for item in lista_carrossel %}
+    <main>
+        <div class="postagem-edicao">
+            <img src="{{item.imagem.url}}" alt="Imagem do card" style="width:20rem;">
+            <div class="bt-ajuste">
+                <br>
+                <a href="/carrossel/update/{{item.id}}"><button type="button" class="btn btn-success">Atualizar</button></a>
+                <a href="/carrossel/delete/{{item.id}}"><button type="button" class="btn btn-danger">Excluir</button></a>
+            </div>
+            <br>
+        </div>   
+    </main>    
+{% endfor %}
+
+  <br><br><br><br>

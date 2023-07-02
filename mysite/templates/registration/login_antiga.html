@@ -1,0 +1,91 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="{% static 'relatorioapp/style.css'%}">
+    {% block titulo_page %}
+    <title>Adicione um Relatório</title>
+    {%  endblock %}
+</head>
+<body>
+
+
+
+    {% if user.is_authenticated%}
+    {% block header_logout %}
+        <header class="header-1">
+        <a href="#" class="logo">PIPA PESQUISA</a>
+         <i class='bx bx-menu' id="menu-icon"></i>
+          <nav class="navbar">
+              <a href="{% url 'relatorio:home'%}">HOME</a>
+              <a href="#contact">CONTATO</a>
+              <a href="{% url 'logout' %}"><button type="button" class="btn btn-danger">LOGOUT</button></a>
+              <a href="" class="active"><b>{{user.get_full_name}}!</b></a>
+          </nav>
+          </header>
+      {% endblock %}
+    {% else %}
+    {% block header_login %}
+        <header class="header-1">
+            <a href="#" class="logo">PIPA PESQUISA</a>
+    
+            <i class='bx bx-menu' id="menu-icon"></i>
+    
+            <nav class="navbar">
+                <a href="{% url 'relatorio:home'%}" class="active">HOME</a>
+                <a href="#">CONTATO</a>
+                <a href="{% url 'login' %}"><button type="button" class="btn btn-outline-light">LOGIN</button></a>
+            </nav>
+        </header>
+    {% endblock %}
+    {% endif %}
+
+    <br><br><br><br><br><br><br><br><br><br><br>
+
+
+<div class="container">
+<h1>Faça o login para ter acesso ao conteúdo</h1>
+
+    <form method='post' action="{% url 'login' %}">
+        
+            {% csrf_token %}
+            <div class="form-outline mb-4">
+                <div class="form-label">
+                    {{form.username.label_tag}}
+                </div>
+                <div class="form-control">
+                    {{form.username}}
+                </div>
+                <div class="form-label">
+                    {{form.password.label_tag}}
+                </div>
+                <div class="form-control">
+                    {{form.password}}
+                </div>
+            </div>
+            <input type="submit" class="btn btn-primary btn-block mb-4" value='login'>
+            <input type="hidden" name='next' value="{{next}}">       
+    </form> 
+</div>
+
+{% block footer %}
+<footer class="footer">
+  <div class="footer-text">
+      <p>© Copyright Rede Bahia 2022. All Rights Reserved to Rede Bahia</p>
+  </div>
+
+  <div class="footer-iconTop">
+      <a href="#carouselExampleDark"><i class='bx bx-up-arrow-alt'></i></a>
+  </div>
+</footer>
+{% endblock %}
+
+
+</body>
+</html>

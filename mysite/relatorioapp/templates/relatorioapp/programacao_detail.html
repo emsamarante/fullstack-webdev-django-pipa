@@ -1,0 +1,277 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br" >
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="{% static 'relatorioapp/style.css'%}">
+    {% block titulo_page %}
+    <title>Detalhe do Relatório</title>
+    {%  endblock %}
+</head>
+<body>
+
+{% comment %} 
+  Modificando a barra de navegação a depender do estado do usário:
+  Logado ou não-logado.
+{% endcomment %}
+{% if user.is_authenticated%}
+{% block header_logout %}
+    <header class="header-1">
+    <a href="#" class="logo">PIPA PESQUISA</a>
+     <i class='bx bx-menu' id="menu-icon"></i>
+      <nav class="navbar">
+          <a href="" class="active">Olá, {{user.get_full_name}}!</a>
+          <a href="{% url 'relatorio:home'%}">HOME</a>
+          <a href="{% url 'relatorio:contato'%}">CONTATO</a>
+          <a href="{% url 'logout' %}"><button type="button" class="btn btn-danger">LOGOUT</button></a>
+      </nav>
+      </header>
+  {% endblock %}
+{% else %}
+{% block header_login %}
+    <header class="header-1">
+        <a href="#" class="logo">PIPA PESQUISA</a>
+
+        <i class='bx bx-menu' id="menu-icon"></i>
+
+        <nav class="navbar">
+            <a href="{% url 'relatorio:home'%}" class="active">HOME</a>
+            <a href="{% url 'relatorio:list_relatorio'%}?tipo=Noticia">NOTICIAS</a>
+            <a href="#">CONTATO</a>
+            <a href="{% url 'login' %}"><button type="button" class="btn btn-outline-light">LOGIN</button></a>
+        </nav>
+    </header>
+{% endblock %}
+{% endif %}
+
+{% block submenu %}
+<div class="submenu">
+  <a href="{% url 'relatorio:list_relatorio'%}?tipo=Pesquisa" class="botao-submenu">PESQUISAS</a>
+  <a href="{% url 'relatorio:conceitos_audiencia'%}" class="botao-submenu">CONCEITOS</a>
+  <a href="{% url 'relatorio:list_programacao'%}?tipo=Programacao" class="botao-submenu">PROGRAMAÇÃO</a>
+  <a href="{% url 'relatorio:list_programacao'%}?tipo=Pipacast" class="botao-submenu">PIPACAST</a>
+  <a href="{% url 'relatorio:list_relatorio'%}?tipo=Noticia" class="botao-submenu">NOTÍCIA</a>
+  {% if user.is_authenticated%}
+    {% if user.groups.all %} 
+      {% for group in user.groups.all %}
+        {% if group.name == 'leitor' %}
+            <a href="{% url 'relatorio:list_relatorio'%}?tipo=Relatorio_de_audiencia" class="botao-submenu">RELATÓRIOS</a>
+        {% endif %}
+        {% if group.name == 'editor' or group.name == 'root' %}
+          <a href="{% url 'relatorio:list_relatorio'%}?tipo=Relatorio_de_audiencia" class="botao-submenu">RELATÓRIOS</a>
+          <a href="{% url 'relatorio:create_relatorio'%}" class="botao-submenu">ADD RELATÓRIO</a>
+          <a href="{% url 'relatorio:create_programacao'%}" class="botao-submenu">ADD PROGRAMAÇÂO</a>
+          <a href="{% url 'relatorio:create_carrossel'%}" class="botao-submenu">CARROSSEL</a>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  {% endif %}
+</div>
+{% endblock %}
+
+
+<br><br><br><br><br><br><br>
+
+
+
+
+<div class='container'>    
+    {% if user.is_authenticated %}
+        {% if user.groups.all %}
+            {% for group in user.groups.all %}
+                {% if group.name != 'leitor' %}
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    {% comment %} <a href="/programacao/update/{{relatorio.id}}"><button class="btn btn-secondary" type="button"  >Atualizar Conteúdo</button></a> {% endcomment %}
+                    <a href="/programacao/delete/{{programacao.id}}"><button class="btn btn-danger me-md-2" type="button"  >Excluir Conteúdo</button></a>        
+                </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endif %}
+</div>
+<br>
+
+
+
+
+{% if programacao.tipo == 'Pipacast' %}
+
+	{% if programacao.subtipo == 'pdf' %}
+
+		<div class = 'container'>
+			{% if programacao.arquivo %}
+				<iframe src="{{programacao.arquivo.url}}" type="application/pdf" width="100%" height="900px">
+			{% endif %}			
+		</div>
+
+	{% else %}
+
+		<div class='container'>
+			{% if programacao.titulo %}
+        		<h1 class="title" style="font-size:4rem;"><b>{{programacao.titulo}}</b></h1>  
+        		<br>  
+    		{% endif%}
+
+    		{% if programacao.descricao %}
+			    <div class="linha-fina">
+			        <h2 style="font-size:1.25rem;">{{programacao.descricao}}</h2>
+			    </div>
+    		{% endif %}
+
+		    <div class="barra-titulo">
+		        <p class="escritor" style="font-size:1.25rem;"><b>Por {{programacao.autor}}</b></p>		        
+		        {% if programacao.data%}
+			        <p class="data" style="font-size:1rem;">{{programacao.data}} </p>
+			        <br>
+					<hr><br>
+		        {% endif %}
+		    </div>
+
+	        {% if programacao.imagem_post %}
+		        {% if programacao.legenda_imagem %}
+			        <img class='img-paginas' src="{{programacao.imagem_post.url}}" width="800rem" height="500rem">
+			        <br><br>
+			        <p class="descricao" style="font-size:1rem; width:50rem">{{programacao.legenda_imagem}}</p>
+			        <br>
+		        {% endif %}
+		    {% endif %}
+
+		    {% if programacao.paragrafo1 %}
+		        <p class="texto" style="font-size:1.25rem;">{{programacao.paragrafo1}}</p>
+		        <br>
+		    {% endif %}
+
+		    {% if programacao.paragrafo2 %}
+		        <p class="texto" style="font-size:1.25rem;">{{programacao.paragrafo2}}</p>
+		        <br>
+		    {% endif %}
+
+		    {% if programacao.paragrafo3 %}
+		        <p class="texto" style="font-size:1.25rem;">{{programacao.paragrafo3}}</p>
+		        <br>
+		    {% endif %}
+
+		    {% if programacao.paragrafo4 %}
+		        <p class="texto" style="font-size:1.25rem;">{{programacao.paragrafo4}}</p>
+		        <br>
+		    {% endif %}
+
+		    {% if programacao.paragrafo5 %}
+		        <p class="texto" style="font-size:1.25rem;">{{programacao.paragrafo5}}</p>
+		        <br>
+		    {% endif %}
+
+			{% if programacao.link %}			
+				<p class="texto">
+					<a href={{programacao.link}} target="blank">Clique aqui para ver o conteúdo.<a>				
+				</p>
+				<br>
+			{% endif %}
+
+
+		    <br><br><br><br>
+
+		</div>
+
+	{% endif %}
+{% else %}
+
+	{% if programacao.subtipo == 'pdf' %}
+
+		<div class = 'container'>
+			{% if programacao.arquivo %}
+				<iframe src="{{programacao.arquivo.url}}" type="application/pdf" width="100%" height="900px">
+			{% endif %}			
+		</div>
+
+	{% else %}
+
+		<div class='container'>
+			{% if programacao.titulo %}
+        		<h1 class="title" style="font-size:4rem;"><b>{{programacao.titulo}}</b></h1>  
+        		<br>  
+    		{% endif%}
+
+    		{% if programacao.descricao %}
+			    <div class="linha-fina">
+			        <h2 style="font-size:1.25rem;">{{programacao.descricao}}</h2>
+			    </div>
+    		{% endif %}
+
+		    <div class="barra-titulo">
+		        <p class="escritor" style="font-size:1.25rem;"><b>Por {{programacao.autor}}</b></p>		        
+		        {% if programacao.data%}
+			        <p class="data" style="font-size:1rem;">{{programacao.data}} </p>
+			        <br><br>
+		        {% endif %}
+		    </div>
+
+	        {% if programacao.imagem_post %}
+		        {% if programacao.legenda_imagem %}
+			        <img class='img-paginas' src="{{programacao.imagem_post.url}}" width="800rem" height="500rem">
+			        <br><br>
+			        <p class="descricao" style="font-size:1rem;">{{programacao.legenda_imagem}}</p>
+			        <br>
+		        {% endif %}
+		    {% endif %}
+
+		    {% if programacao.paragrafo1 %}
+		        <p class="texto" style="font-size:1.25rem;">{{programacao.paragrafo1}}</p>
+		        <br>
+		    {% endif %}
+
+		    {% if programacao.paragrafo2 %}
+		        <p class="texto" style="font-size:1.25rem;">{{programacao.paragrafo2}}</p>
+		        <br>
+		    {% endif %}
+
+		    {% if programacao.paragrafo3 %}
+		        <p class="texto" style="font-size:1.25rem;">{{programacao.paragrafo3}}</p>
+		        <br>
+		    {% endif %}
+
+		    {% if programacao.paragrafo4 %}
+		        <p class="texto" style="font-size:1.25rem;">{{programacao.paragrafo4}}</p>
+		        <br>
+		    {% endif %}
+
+		    {% if programacao.paragrafo5 %}
+		        <p class="texto" style="font-size:1.25rem;">{{programacao.paragrafo5}}</p>
+		        <br>
+		    {% endif %}
+
+			{% if programacao.link %}			
+				<p class="texto">
+					<a href={{programacao.link}} target="blank">Clique aqui para ver o conteúdo.<a>				
+				</p>
+				<br><br><br>
+			{% endif %}
+
+		    <br><br><br><br>
+
+		</div>
+
+	{% endif %}
+
+{% endif %}
+
+
+{% block footer %}
+<footer class="footer">
+  <div class="footer-text">
+      <p>© Copyright Rede Bahia 2022. All Rights Reserved to Rede Bahia</p>
+  </div>
+
+  <div class="footer-iconTop">
+      <a href="#carouselExampleDark"><i class='bx bx-up-arrow-alt'></i></a>
+  </div>
+</footer>
+{% endblock %}
+
+
+</body>
+</html>

@@ -1,0 +1,153 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="{% static 'relatorioapp\style.css'%}">
+    {% block titulo_page %}
+    <title>PIPA</title>
+    {%  endblock %}
+</head>
+<body>
+
+{% comment %} 
+  Modificando a barra de navegação a depender do estado do usário:
+  Logado ou não-logado.
+{% endcomment %}
+{% if user.is_authenticated%}
+{% block header_logout %}
+    <header class="header-1">
+    <a href="#" class="logo">PIPA PESQUISA</a>
+     <i class='bx bx-menu' id="menu-icon"></i>
+      <nav class="navbar">
+          <a href="" class="active">Olá, {{user.get_full_name}}!</a>
+          <a href="{% url 'relatorio:home'%}">HOME</a>
+          <a href="#contact">CONTATO</a>
+          <a href="{% url 'logout' %}"><button type="button" class="btn btn-danger">LOGOUT</button></a>
+      </nav>
+      </header>
+  {% endblock %}
+{% else %}
+{% block header_login %}
+    <header class="header-1">
+        <a href="#" class="logo">PIPA PESQUISA</a>
+
+        <i class='bx bx-menu' id="menu-icon"></i>
+
+        <nav class="navbar">
+            <a href="{% url 'relatorio:home'%}" class="active">HOME</a>
+            <a href="{% url 'relatorio:list_relatorio'%}?tipo=Noticia">NOTICIAS</a>
+            <a href="{% url 'relatorio:contato'%}">CONTATO</a>
+            <a href="{% url 'login' %}"><button type="button" class="btn btn-outline-light">LOGIN</button></a>
+        </nav>
+    </header>
+{% endblock %}
+{% endif %}
+
+{% block submenu %}
+<div class="submenu">
+  <a href="{% url 'relatorio:list_relatorio'%}?tipo=Pesquisa" class="botao-submenu">PESQUISAS</a>
+  <a href="{% url 'relatorio:conceitos_audiencia'%}" class="botao-submenu">CONCEITOS</a>
+  <a href="{% url 'relatorio:list_programacao'%}?tipo=Programacao" class="botao-submenu">PROGRAMAÇÃO</a>
+  <a href="{% url 'relatorio:list_programacao'%}?tipo=Pipacast" class="botao-submenu">PIPACAST</a>
+  <a href="{% url 'relatorio:list_relatorio'%}?tipo=Noticia" class="botao-submenu">NOTÍCIA</a>
+  {% if user.is_authenticated%}
+    {% if user.groups.all %} 
+      {% for group in user.groups.all %}
+        {% if group.name == 'leitor' %}
+            <a href="{% url 'relatorio:list_relatorio'%}?tipo=Relatorio_de_audiencia" class="botao-submenu">RELATÓRIOS</a>
+        {% endif %}
+        {% if group.name == 'editor' or group.name == 'root' %}
+          <a href="{% url 'relatorio:list_relatorio'%}?tipo=Relatorio_de_audiencia" class="botao-submenu">RELATÓRIOS</a>
+          <a href="{% url 'relatorio:create_relatorio'%}" class="botao-submenu">ADD RELATÓRIO</a>
+          <a href="{% url 'relatorio:create_programacao'%}" class="botao-submenu">ADD PROGRAMAÇÂO</a>
+          <a href="{% url 'relatorio:create_carrossel'%}" class="botao-submenu">CARROSSEL</a>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  {% endif %}
+</div>
+{% endblock %}
+    
+    <br>    <br>    <br>    <br>    <br>    <br>    <br> <br> 
+
+
+    <div class='container'>
+      {% if user.is_authenticated %}
+        {% if user.groups.all %}
+          {% for group in user.groups.all %}
+            {% if group.name != 'leitor' %}
+              <h1 class="t-pg-conceitos"><b>Página de Exclusão de conteúdo</b></h1>
+              <br>              
+              <h3>Uma vez excluído não pode ser recuperado!</h3>
+              
+              <h3>Item a ser excluído: {{relatorio.titulo}}</h3>
+              <br>
+              <form action="" method="post">
+                  {% csrf_token %}
+                  <button class="btn btn-danger" type="submit"> Confirme a Exclusão</button>
+              </form>
+            {% else %}
+              <h1>Acesso restrito!</h1>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      {% endif %}
+    </div>
+
+
+
+
+
+
+
+
+    {% comment %} <div class='container'>
+
+        <h2>Você tem certeza que quer excluir o relatório? Uma vez excluído não pode ser recuperado!</h1>
+        <br>
+        <h2>Relatório a ser excluído: {{relatorio.titulo}}</h1>
+        <br>
+        {% block card_relatorio %}
+
+        <div class="container" >
+            <div class="row">  
+                
+                    <div class="card" style="width: 37rem; border: none;">
+                        
+                        <img src="{{relatorio.imagem_thumb.url}}" class="card-img-top" alt="..."style="max-height: 20rem;">
+
+                        <div class="card-body">
+                            <h5 class="card-title"> Título: {{relatorio.titulo}} - Data: {{relatorio.data}}   </h5>
+                            <p class="card-text"> {{relatorio.descricao}}</p>          
+                        </div>
+                    </div>
+                
+            </div>
+        </div> 
+
+        {% endblock %}
+
+
+        <form action="" method="post">
+            {% csrf_token %}
+            <button class="btn btn-danger" type="submit"> Confirme a Exclusão</button>
+        </form>
+    </div> {% endcomment %}
+
+
+    
+
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
+    <script src="{% static 'mainApp\script.js'%}"></script>
+</body>
+</html>

@@ -1,0 +1,222 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <!-- Adicione o jQuery UI -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.38.0/js/tempusdominus-bootstrap-4.min.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.38.0/css/tempusdominus-bootstrap-4.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="{% static 'relatorioapp/style.css'%}">
+    {% block titulo_page %}
+    <title>PIPA</title>
+    {%  endblock %}
+</head>
+<body>
+
+
+{% block header_login %}
+  <header class="header-1">
+    <a href="#" class="logo">PIPA PESQUISA</a>
+
+    <i class='bx bx-menu' id="menu-icon"></i>
+
+    <nav class="navbar">
+        <a href="{% url 'relatorio:home'%}" class="active">HOME</a>
+        <a href="{% url 'relatorio:list_relatorio'%}?tipo=Noticia">NOTICIAS</a>
+        <a href="#">CONTATO</a>
+        <a href="{% url 'login' %}"><button type="button" class="btn btn-outline-light">LOGIN</button></a>
+    </nav>
+  </header>
+{% endblock %}
+
+
+
+{% block header_logout %}
+<header class="header-1">
+  <a href="#" class="logo">PIPA PESQUISA</a>
+    <i class='bx bx-menu' id="menu-icon"></i>
+    <nav class="navbar">
+      <a href="{% url 'relatorio:home'%}">HOME</a>
+      <a href="{% url 'relatorio:list_relatorio'%}?tipo=Noticia">NOTICIAS</a>
+      <a href="#contact">CONTATO</a>
+      <a href="{% url 'logout' %}"><button type="button" class="btn btn-danger">LOGOUT</button></a>
+      <a href="#" class="active"><b>Bem-vindo usuario!</b></a>
+    </nav>
+</header>
+
+{% endblock %}
+
+{% block submenu %}
+<div class="submenu">
+  <a href="{% url 'relatorio:list_relatorio'%}?tipo=Pesquisa" class="botao-submenu"><button></button>PESQUISAS</a>
+  <a href="{% url 'relatorio:conceitos_audiencia'%}" class="botao-submenu"><button></button>CONCEITOS</a>
+  <a class="botao-submenu"><button></button>PROGRAMAÇÃO</a>
+  <a class="botao-submenu"><button></button>PIPACAST</a>
+  <a href="{% url 'relatorio:list_relatorio'%}?tipo=Noticia" class="botao-submenu"><button></button>NOTÍCIA</a>
+  <a href="{% url 'relatorio:list_relatorio'%}?tipo=Relatorio" class="botao-submenu"><button></button>RELATÓRIOS</a>
+  <a href="{% url 'relatorio:create_relatorio'%}" class="botao-submenu"><button></button>ADD RELATÓRIO</a>
+  <a href="{% url 'relatorio:create_programacao'%}" class="botao-submenu"><button></button>ADD PROGRAMAÇÂO</a>
+</div>
+{% endblock %}
+
+
+
+
+{% block carrousel %}
+<div id="carouselExampleDark" class="carousel carousel-dark slide">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
+      <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="3" aria-label="Slide 4"></button>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active" data-bs-interval="10000">
+        <img src="{% static 'mainApp/images/img-globo-2.jpg'%}" class="d-block w-100" alt="...">
+        <div class="carousel-caption d-none d-md-block">
+          <h1>First slide label</h1>
+          <p>Some representative placeholder content for the first slide.</p>
+        </div>
+      </div>
+      <div class="carousel-item" data-bs-interval="20000">
+        <img src="{% static 'mainApp/images/img-globo.jpg'%}" class="d-block w-100" alt="...">
+        <div class="carousel-caption d-none d-md-block">
+          <h1>First slide label</h1>
+          <p>Some representative placeholder content for the second slide.</p>
+        </div>
+      </div>
+      <div class="carousel-item" data-bs-interval="30000">
+        <img src="{% static 'mainApp/images/img-globo-3.jpg'%}" class="d-block w-100" alt="...">
+        <div class="carousel-caption d-none d-md-block">
+          <h1>First slide label</h1>
+          <p>Some representative placeholder content for the third slide.</p>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'mainApp/images/img-globo-3.jpg'%}" class="d-block w-100" alt="...">
+        <div class="carousel-caption d-none d-md-block">
+          <h1>First slide label</h1>
+          <p>Some representative placeholder content for the third slide.</p>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div> 
+{% endblock %}
+
+
+
+{% block card_relatorio %}
+
+<div class="container" >
+    <div class="row">  
+        {% for item in lista_de_relatorios %}
+            <div class="card" style="width: 37rem; border: none;">
+                {% if item.imagem %}
+                    <img src="{{item.imagem.url}}" class="card-img-top" alt="..."style="max-height: 20rem;">
+                {%else%}
+                    <img src="{% static '/mainApp/images/powerbi.png' %}" class="card-img-top" alt="..." style="max-height: 20rem;">
+                {% endif %}
+                
+
+                <div class="card-body">
+                    <h5 class="card-title"> Título: {{item.titulo}} - Data: {{item.data}}   </h5>
+                    <p class="card-text"> {{item.descricao}}</p>
+                    <a href="/relatorio/detail/{{item.id}}" class="btn btn-primary">Clique para ver o relatório.</a>              
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% comment %} {% block formulario_Criar_Relatorio %}
+<div class="container">
+    <div class="form-group">
+        <form method="POST" enctype='multipart/form-data'>
+            {% csrf_token %}
+            {% for field in form %}
+            <div class='myform'>
+                {{ field.label_tag }}
+                <div class="form-control">
+                  {{ field }}
+                </div>
+                {{ field.errors }}
+            </div>
+            {% endfor %}       
+            <button type="submit">Upload</button>
+        </form>
+    </div>
+</div>
+{% endblock%} {% endcomment %}
+
+
+
+
+{% block formulario_Criar_Relatorio %}
+          <div class="container">
+            {% comment %} <h1 classe="title">Use esta página para adicionar os conteúdos:</h1> {% endcomment %}
+            <li class="texto"><strong>Relatório de audiência - Arquivo PDF</strong></li>
+            <li class="texto"><strong>Notícia - Matéria no formato de Blog</strong></li>
+            <li class="texto"><strong>Pesquisa - Matéria no formato de Blog</strong></li>
+            <li class="texto"><strong>Outro - Hospedar conteúdo externo</strong></li>
+          </div>
+          <div class="container">
+            <div class="form-group">
+                <form method="POST" enctype='multipart/form-data'>
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div class='mb-3'>
+                      <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                      {{ field }}
+                      {{ field.errors }}
+                    </div>
+                    {% endfor %}       
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </form>
+            </div>
+          </div>
+        {% endblock%}
+
+
+{% block footer %}
+<footer class="footer">
+  <div class="footer-text">
+      <p>© Copyright Rede Bahia 2022. All Rights Reserved to Rede Bahia</p>
+  </div>
+
+  <div class="footer-iconTop">
+      <a href="#carouselExampleDark"><i class='bx bx-up-arrow-alt'></i></a>
+  </div>
+</footer>
+{% endblock %}
+
+
+
+<!-- Adicione o jQuery -->
+
+
+{% block JS %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
+<script src="{% static 'mainApp\script.js'%}"></script>
+{% endblock%}
+
+
+
+
+</body>
+</html>
