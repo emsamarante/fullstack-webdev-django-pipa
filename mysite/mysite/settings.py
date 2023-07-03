@@ -143,10 +143,6 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 #DEFAULT_FROM_EMAIL = "pipapesquisas@redebahia.com.br"
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-DEFAULT_FROM_EMAIL = "pipapesquisas@gmail.com"
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
-EMAIL_HOST_USER = "pipapesquisas@gmail.com"
-EMAIL_HOST_PASSWORD = "Labpesquisa1*"
 EMAIL_USE_TLS = True
